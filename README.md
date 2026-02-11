@@ -1,5 +1,9 @@
 # steamdecktricks
 
+```
+DXVK_CONFIG="dxgi.maxDeviceMemory = 8192; dxgi.maxSharedMemory = 8192" %command%
+```
+
 `zh_CN.UTF-8`:
 ```
 LANG=zh_CN.UTF-8 LC_CTYPE=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 %command%

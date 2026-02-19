@@ -1,12 +1,12 @@
 # blocknetwork
 
 ```
-sudo cp /usr/bin/systemd-run /usr/local/bin/
-sudo chmod u+s /usr/local/bin/systemd-run
+sudo cp /usr/bin/systemd-run2 /usr/local/bin/systemd-run2
+sudo chmod u+s /usr/local/bin/systemd-run2
 ```
 
 ```
-systemd-run --uid=1000 --gid=1000 --scope -p IPAddressAllow=localhost -p IPAddressDeny=any %command%
+systemd-run2 --uid=1000 --gid=1000 --scope -p IPAddressAllow=localhost -p IPAddressDeny=any %command%
 ```
 
 # steamdecktricks

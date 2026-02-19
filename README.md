@@ -92,11 +92,61 @@ for letter in {a..z}; do
     rm -f "${letter}::"
     ln -s "../drive_c" "${letter}::"
 
-    # 打印进度（可选，如果觉得太乱可以注释掉）
     echo "已强制映射: ${letter}: 和 ${letter}:: -> ../drive_c"
 done
 
 echo "完成！现在除了 c: 以外，所有 a-z 的盘符都已指向 ../drive_c。"
+```
+
+# remove isolate_home
+
+```
+./isolate_home_rm.sh 1548510
+```
+
+```
+#!/bin/bash
+#set -x
+
+APPID=$1
+
+if [ -z "$APPID" ]; then
+    echo "使用方法: $0 <AppID>"
+    exit 1
+fi
+
+TARGET_DIR="$HOME/.local/share/Steam/steamapps/compatdata/$APPID/pfx/dosdevices"
+
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "错误: 目录 $TARGET_DIR 不存在。"
+    exit 1
+fi
+
+echo "正在还原 AppID: $APPID 的驱动器映射 (清理多余快捷方式)..."
+
+cd "$TARGET_DIR" || exit
+
+# 遍历 a 到 z
+for letter in {a..z}; do
+    # 绝对不要删除 c:，它是系统盘
+    if [ "$letter" == "c" ]; then
+        continue
+    fi
+
+    # 删除单冒号快捷方式 (如 a:, b:, d: ...)
+    if [ -L "${letter}:" ]; then
+        rm "${letter}:"
+        echo "已删除快捷方式: ${letter}:"
+    fi
+
+    # 删除双冒号快捷方式 (如 a::, b::, d:: ...)
+    if [ -L "${letter}::" ]; then
+        rm "${letter}::"
+        echo "已删除快捷方式: ${letter}::"
+    fi
+done
+
+echo "清理完成！Proton 将在下次启动游戏时恢复默认映射。"
 ```
 
 # steamdecktricks

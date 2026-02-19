@@ -25,7 +25,7 @@ $ cat ./blocknet.sh
 #!/bin/bash
 #set -x
 
-SUDO_PASSWORD=3389
+SUDO_PASSWORD=password
 
 SCOPE_NAME=$(echo $SUDO_PASSWORD | sudo -S systemctl list-units "run-p*.scope" --state=running --no-legend | awk '{print $1}')
 

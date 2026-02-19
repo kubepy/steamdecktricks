@@ -47,6 +47,58 @@ fi
 exit 0
 ```
 
+# isolate_home
+
+```
+./isolate_home.sh 1548510
+```
+
+```
+#!/bin/bash
+#set -x
+
+APPID=$1
+
+if [ -z "$APPID" ]; then
+    echo "使用方法: $0 <AppID>"
+    exit 1
+fi
+
+TARGET_DIR="$HOME/.local/share/Steam/steamapps/compatdata/$APPID/pfx/dosdevices"
+
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "错误: 目录 $TARGET_DIR 不存在。"
+    exit 1
+fi
+
+echo "正在处理 AppID: $APPID 的驱动器映射（强制创建全量映射）..."
+
+cd "$TARGET_DIR" || exit
+
+# 遍历 a 到 z
+for letter in {a..z}; do
+    # 绝对不能动 C 盘，否则 Proton 环境会损坏
+    if [ "$letter" == "c" ]; then
+        continue
+    fi
+
+    # 1. 处理单冒号映射 (例如 d:)
+    # 强制删除（无论是否存在，无论是文件还是死链接）
+    rm -f "${letter}:"
+    # 统一创建指向 ../drive_c 的软链接
+    ln -s "../drive_c" "${letter}:"
+
+    # 2. 处理双冒号映射 (例如 d::)
+    rm -f "${letter}::"
+    ln -s "../drive_c" "${letter}::"
+
+    # 打印进度（可选，如果觉得太乱可以注释掉）
+    echo "已强制映射: ${letter}: 和 ${letter}:: -> ../drive_c"
+done
+
+echo "完成！现在除了 c: 以外，所有 a-z 的盘符都已指向 ../drive_c。"
+```
+
 # steamdecktricks
 
 ```

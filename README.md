@@ -1,7 +1,7 @@
 # blocknetwork
 
 ```
-sudo cp /usr/bin/systemd-run2 /usr/local/bin/systemd-run2
+sudo cp /usr/bin/systemd-run /usr/local/bin/systemd-run2
 sudo chmod u+s /usr/local/bin/systemd-run2
 ```
 

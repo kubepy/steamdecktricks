@@ -9,7 +9,7 @@ sudo chmod u+s /usr/local/bin/systemd-run2
 systemd-run2 --uid=1000 --gid=1000 --scope -p IPAddressAllow=localhost -p IPAddressDeny=any %command%
 ```
 
-# blocknet.sh
+# blocknet.sh  （enter the game then run script to block network)
 
 ```
 sudo cp /usr/bin/systemd-run /usr/local/bin/systemd-run2

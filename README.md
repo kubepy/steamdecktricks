@@ -9,6 +9,44 @@ sudo chmod u+s /usr/local/bin/systemd-run2
 systemd-run2 --uid=1000 --gid=1000 --scope -p IPAddressAllow=localhost -p IPAddressDeny=any %command%
 ```
 
+# blocknet.sh
+
+```
+sudo cp /usr/bin/systemd-run /usr/local/bin/systemd-run2
+sudo chmod u+s /usr/local/bin/systemd-run2
+```
+
+```
+systemd-run2 --uid=1000 --gid=1000 --scope %command%
+```
+
+```
+$ cat ./blocknet.sh 
+#!/bin/bash
+#set -x
+
+SUDO_PASSWORD=3389
+
+SCOPE_NAME=$(echo $SUDO_PASSWORD | sudo -S systemctl list-units "run-p*.scope" --state=running --no-legend | awk '{print $1}')
+
+if [ -z "$SCOPE_NAME" ]; then
+    echo "Scope Not Found"
+    exit 1
+fi
+
+IS_BLOCKED=$(systemctl show "$SCOPE_NAME" -p IPAddressDeny --value)
+
+if [ "$IS_BLOCKED" == "" ]; then
+    echo $SUDO_PASSWORD | sudo -S systemctl set-property "$SCOPE_NAME" IPAddressAllow=localhost IPAddressDeny=any
+    echo ">>> systemctl set-property "$SCOPE_NAME" IPAddressAllow=localhost IPAddressDeny=any"
+else
+    echo $SUDO_PASSWORD | sudo -S systemctl set-property "$SCOPE_NAME" IPAddressAllow= IPAddressDeny=
+    echo ">>> systemctl set-property "$SCOPE_NAME" IPAddressAllow= IPAddressDeny="
+fi
+
+exit 0
+```
+
 # steamdecktricks
 
 ```
